@@ -9,19 +9,22 @@ function! s:underlineWith(character) abort
   execute "normal! o" . l:lineLength . "i" . a:character
 endfunction
 
-function! s:atxHeaders(level) abort
+function! s:atxHeader(level) abort
   execute "normal! "a:level . "I#a "
 endfunction
 
 " insert a markdown header (defaults to setext style h1)
 function! s:markdownHeader(...) abort
+  let l:view = winsaveview()
   let l:level = a:0 > 0 && a:1 > 0 ? a:1 <= 6 ? a:1 : 6 : 1
   if a:0 > 1 && a:2 == 'atx' || l:level > 2
-    call s:atxHeaders(l:level)
+    call s:atxHeader(l:level)
+    let l:view['col'] = l:view['col'] + l:level + 1
   else
     let l:character = l:level == 1 ? '=' : '-'
     call s:underlineWith(l:character)
   endif
+  call winrestview(l:view)
 endfunction
 
 function! s:headerCompletion(ArgLead,CmdLine,CursorPos)
