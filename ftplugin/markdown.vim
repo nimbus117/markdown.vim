@@ -2,6 +2,7 @@ setlocal textwidth=80
 setlocal spell
 
 let g:markdown_folding = 1 
+setlocal nofoldenable
 
 function! s:underlineWith(character) abort
   let l:lineLength = strlen(getline('.'))
@@ -13,7 +14,7 @@ function! s:atxHeaders(level) abort
 endfunction
 
 " insert a markdown header (defaults to setext style h1)
-function s:markdownHeader(...) abort
+function! s:markdownHeader(...) abort
   let l:level = a:0 > 0 && a:1 > 0 ? a:1 <= 6 ? a:1 : 6 : 1
   if a:0 > 1 && a:2 == 'atx' || l:level > 2
     call s:atxHeaders(l:level)
@@ -23,7 +24,7 @@ function s:markdownHeader(...) abort
   endif
 endfunction
 
-function s:headerCompletion(ArgLead,CmdLine,CursorPos)
+function! s:headerCompletion(ArgLead,CmdLine,CursorPos)
   if a:CursorPos == 9
     return ['1','2','3','4','5','6']
   elseif a:CursorPos > 10
