@@ -7,7 +7,7 @@ function! markdown#headers#set(...) abort
   let l:lineNumber = line(".")
   let l:level = a:0 > 0 && a:1 > 0 ? a:1 <= 6 ? a:1 : 6 : 1
   if s:isHeader()
-    call s:remove()
+    call markdown#headers#remove()
   endif
   if a:0 > 1 && a:2 == "atx" || l:level > 2
     call s:insertAtx(l:level)
@@ -36,7 +36,15 @@ function! markdown#headers#toggle() abort
   if l:level < 6
     call markdown#headers#set(l:level + 1)
   else
-    call s:remove()
+    call markdown#headers#remove()
+  endif
+endfunction
+
+function! markdown#headers#remove() abort
+  if s:isSetext()
+    call s:removeSetext()
+  elseif s:isAtx()
+    call s:removeAtx()
   endif
 endfunction
 " }}}
@@ -51,14 +59,6 @@ endfunction
 
 function! s:insertAtx(level) abort
   execute "normal! "a:level . "I#a "
-endfunction
-
-function! s:remove() abort
-  if s:isSetext()
-    call s:removeSetext()
-  elseif s:isAtx()
-    call s:removeAtx()
-  endif
 endfunction
 
 function! s:removeSetext() abort
@@ -101,10 +101,11 @@ endfunction
 
 " command completion {{{
 
-function! markdown#headers#insertCompletion(ArgLead,CmdLine,CursorPos) abort
-  if a:CursorPos == 9
+function! markdown#headers#insertCompletion(ArgLead, CmdLine, CursorPos) abort
+  let l:argCount = len(split(a:CmdLine, " "))
+  if l:argCount == 1
     return ["1","2","3","4","5","6"]
-  elseif a:CursorPos > 10
+  elseif l:argCount == 2
     return ["atx", "setext"]
   endif
 endfunction
