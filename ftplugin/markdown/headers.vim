@@ -15,3 +15,7 @@ command! -range -buffer
 command! -range -buffer
       \ MdHeaderDecrease
       \ <line1>,<line2>call markdown#headers#decrease()
+
+command! -range -buffer
+      \ MdHeaderRemove
+      \ <line1>,<line2>call markdown#headers#remove()
