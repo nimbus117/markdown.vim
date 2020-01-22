@@ -1,7 +1,7 @@
 let s:listChar = "-"
 let s:checkedChar = "x"
 let s:uncheckedChar = " "
-let s:listRegEx = "^\\s*" . s:listChar . " "
+let s:listRegEx = "^\\s*" . s:listChar . "\\s"
 
 " main functions {{{
 
@@ -23,7 +23,7 @@ endfunction
 
 function! markdown#checkboxes#remove() abort
   if s:hasCheckbox()
-    execute "substitute/" . s:listChar . " \\[.]/" . s:listChar
+    execute "substitute/" . s:listChar . "\\s\\[.]/" . s:listChar
   endif
 endfunction
 " }}}
@@ -35,10 +35,10 @@ function! s:isListItem() abort
 endfunction
 
 function! s:hasCheckbox() abort
-  return markdown#helpers#matchLine(s:listRegEx . "\\[.] ")
+  return markdown#helpers#matchLine(s:listRegEx . "\\[.]\\s")
 endfunction
 
 function! s:isChecked() abort
-  return markdown#helpers#matchLine(s:listRegEx . "\\[" . s:checkedChar . "] ")
+  return markdown#helpers#matchLine(s:listRegEx . "\\[" . s:checkedChar . "]\\s")
 endfunction
 " }}}
