@@ -10,12 +10,12 @@ command! -buffer
 
 command! -range -buffer
       \ MdHeaderIncrease
-      \ <line1>,<line2>call markdown#headers#increase()
+      \ call markdown#headers#increase(<line1>,<line2>)
 
 command! -range -buffer
       \ MdHeaderDecrease
-      \ <line1>,<line2>call markdown#headers#decrease()
+      \ call markdown#headers#decrease(<line1>,<line2>)
 
 command! -range -buffer
       \ MdHeaderRemove
-      \ <line1>,<line2>call markdown#headers#remove()
+      \ call markdown#headers#remove(<line1>,<line2>)

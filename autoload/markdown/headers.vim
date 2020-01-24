@@ -17,20 +17,6 @@ function! markdown#headers#set(...) abort
   call cursor(l:lineNumber, 1)
 endfunction
 
-function! markdown#headers#increase() abort
-  let l:level = s:getLevel()
-  if s:isHeader() && l:level < 6 && l:level > 0
-    call markdown#headers#set(l:level + 1)
-  endif
-endfunction
-
-function! markdown#headers#decrease() abort
-  let l:level = s:getLevel()
-  if s:isHeader() && l:level > 1
-    call markdown#headers#set(l:level - 1)
-  endif
-endfunction
-
 function! markdown#headers#toggle() abort
   let l:level = s:getLevel()
   if l:level < 6
@@ -40,12 +26,54 @@ function! markdown#headers#toggle() abort
   endif
 endfunction
 
-function! markdown#headers#remove() abort
-  if s:isSetext()
-    call s:removeSetext()
-  elseif s:isAtx()
-    call s:removeAtx()
-  endif
+function! markdown#headers#increase(...) abort
+  let l:current = a:0 > 0 ? a:1 : line('.')
+  let l:end = a:0 > 1 ? a:2 : line('.')
+
+  while l:current <= l:end
+    call cursor(l:current, 1)
+    let l:level = s:getLevel()
+    if s:isHeader() && l:level < 6 && l:level > 0
+      if s:isSetext()
+        let l:end = l:end - 1
+      endif
+      call markdown#headers#set(l:level + 1)
+    endif
+    let l:current = l:current + 1
+  endwhile
+endfunction
+
+function! markdown#headers#decrease(...) abort
+  let l:current = a:0 > 0 ? a:1 : line('.')
+  let l:end = a:0 > 1 ? a:2 : line('.')
+
+  while l:current <= l:end
+    call cursor(l:current, 1)
+    let l:level = s:getLevel()
+    if s:isHeader() && l:level > 1
+      if s:isSetext()
+        let l:end = l:end - 1
+      endif
+      call markdown#headers#set(l:level - 1)
+    endif
+    let l:current = l:current + 1
+  endwhile
+endfunction
+
+function! markdown#headers#remove(...) abort
+  let l:current = a:0 > 0 ? a:1 : line('.')
+  let l:end = a:0 > 1 ? a:2 : line('.')
+
+  while l:current <= l:end
+    call cursor(l:current, 1)
+    if s:isSetext()
+      call s:removeSetext()
+      let l:end = l:end - 1
+    elseif s:isAtx()
+      call s:removeAtx()
+    endif
+    let l:current = l:current + 1
+  endwhile
 endfunction
 " }}}
 
