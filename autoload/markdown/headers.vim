@@ -34,8 +34,10 @@ function! markdown#headers#increase(...) abort
     call cursor(l:current, 1)
     let l:level = s:getLevel()
     if s:isHeader() && l:level < 6 && l:level > 0
-      if s:isSetext()
+      if s:isSetext() && l:level == 2
         let l:end = l:end - 1
+      elseif s:isAtx() && l:level <= 2
+        let l:end = l:end + 1
       endif
       call markdown#headers#set(l:level + 1)
     endif
@@ -51,8 +53,8 @@ function! markdown#headers#decrease(...) abort
     call cursor(l:current, 1)
     let l:level = s:getLevel()
     if s:isHeader() && l:level > 1
-      if s:isSetext()
-        let l:end = l:end - 1
+      if s:isAtx() && l:level <= 3
+        let l:end = l:end + 1
       endif
       call markdown#headers#set(l:level - 1)
     endif
