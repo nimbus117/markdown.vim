@@ -1,6 +1,3 @@
-Markdown Commands
-=================
-
 Headers
 -------
 
